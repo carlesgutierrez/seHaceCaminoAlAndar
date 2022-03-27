@@ -104,7 +104,7 @@ class PlayerModule {
     //SPEED
     let minSpeed = 0.1;
     let marginMinSpeed = 0.1;
-    if(bArduMode)this.newSpeed = map(mySpeedArduino, 0, 5, minSpeed, sliderVelVideo.value());
+    if(bArduMode)this.newSpeed = map(mySpeedArduino, 0, sliderMaxSpeedArduino.value(), minSpeed, sliderVelVideo.value());
     else this.newSpeed = map(mySpeedArduino, 0, width, minSpeed, sliderVelVideo.value()); //5 SPEED MANUAL ADDDED x5
     this.speed = lerp(this.speed, this.newSpeed, this.lerpSpeed);
 
