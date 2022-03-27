@@ -250,15 +250,15 @@ function setupSliders(){
   let default_auxlerpSpeed = 0.05;
 
 
-  let default_SpeedCintaCorer = 2;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
-  let default_VelVideo = 5;
+  let default_SpeedCintaCorrer = 2;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
+  let default_VelVideo = 6;
   let default_MaxVolVideo = 0.7;
   let default_auxtimeFadeIn = 5;
   let default_auxtimeFadeOut = 7;
   let default_timeWithoutInteraction = 10;
 
   
-  sliderMaxSpeedArduino = createSlider(1, 5, default_SpeedCintaCorer);
+  sliderMaxSpeedArduino = createSlider(1, 5, default_SpeedCintaCorrer);
   sliderMaxSpeedArduino.position(initX, initY+deltaY*countSliders);countSliders++;
   sliderMaxSpeedArduino.style('width', sizeSlider+'px');
 
