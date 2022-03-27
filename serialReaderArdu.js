@@ -57,8 +57,7 @@ function gotOpen() {
 
 function gotClose(){
  console.log("Serial Port is Closed");
- latestData = "Serial Port is Closed"; console.log("*****Is this line ok JoakU?*****");
- 
+ latestData = "Serial Port is Closed";
 }
 
 function gotError(theerror) {
@@ -76,13 +75,7 @@ function gotData() {
     // distancia, tiempo y velocidad
     arrayArdu = splitTokens(currentString, ',');
     distArdu = arrayArdu[0];
-    //timeArdu = arrayArdu[1]; // TODO no lo necesito. mejor medirlo yo. 
-    //timeArdu = int(arrayArdu[1])-timeSerialPortOpen;
-    
-    //speedArdu = arrayArdu[2];
     speedArdu = float(arrayArdu[1]); //TODO Joaku, 0 to 5 metros por segundos
-    console.log(currentString);
-    console.log("require adjust MAP range? speedArdu = "+speedArdu);
 
     latestData = distArdu + ',' + speedArdu;
 }

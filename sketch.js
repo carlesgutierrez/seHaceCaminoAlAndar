@@ -38,6 +38,7 @@ let ellapsedTimePlaying
 let playerList = []; //arreglo de objetos Jitter
 
 //UI Sliders + Button Start
+let sliderMaxSpeedArduino;
 let sliderVelVideo;
 let sliderMaxVolVideo;
 let sliderMaxVolMainAudio;
@@ -249,11 +250,18 @@ function setupSliders(){
   let default_auxlerpSpeed = 0.05;
 
 
+  let default_SpeedCintaCorer = 2;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
   let default_VelVideo = 5;
   let default_MaxVolVideo = 0.7;
   let default_auxtimeFadeIn = 5;
   let default_auxtimeFadeOut = 7;
   let default_timeWithoutInteraction = 10;
+
+  
+  sliderMaxSpeedArduino = createSlider(1, 5, default_SpeedCintaCorer);
+  sliderMaxSpeedArduino.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderMaxSpeedArduino.style('width', sizeSlider+'px');
+
 
   sliderVelVideo = createSlider(1, 10, default_VelVideo);
   sliderVelVideo.position(initX, initY+deltaY*countSliders);countSliders++;
@@ -282,10 +290,10 @@ function setupSliders(){
   
 }
 
-function isTouchSliders(){
+function isTouchSliders(){ //TODO NOT USED
   let auxPressedSlider = false;
 
-  auxPressedSlider = (sliderVelVideo._pixelsState.mouseIsPressed)// ||
+  auxPressedSlider = (sliderVelVideo._pixelsState.mouseIsPressed)// || //TODO THIS DO NOT WORK, same as mouseclick
    /*sliderMaxVolVideo._pixelsState.mouseIsPressed ||
    sliderMaxVolMainAudio._pixelsState.mouseIsPressed ||
    sliderSecondsFadeIn._pixelsState.mouseIsPressed ||
@@ -306,11 +314,13 @@ function drawSlidersValues(){
   textAlign(LEFT, BASELINE);
   textSize(10);
 
-  text("Max Speed "+sliderVelVideo.value(), sliderVelVideo.x - auxX, sliderVelVideo.y);
-  text("Max VolFWD "+sliderMaxVolVideo.value(), sliderMaxVolVideo.x - auxX, sliderMaxVolVideo.y);
+
+  text("Max Speed ARDUINO "+sliderMaxSpeedArduino.value(), sliderMaxSpeedArduino.x - auxX, sliderMaxSpeedArduino.y);
+  text("Max Speed VIDEO "+sliderVelVideo.value(), sliderVelVideo.x - auxX, sliderVelVideo.y);
+  text("Max VolFWD VIDEO "+sliderMaxVolVideo.value(), sliderMaxVolVideo.x - auxX, sliderMaxVolVideo.y);
   text("Max VolMainAudio "+sliderMaxVolMainAudio.value(), sliderMaxVolMainAudio.x - auxX, sliderMaxVolMainAudio.y);
-  text("Seconds FadeIN "+sliderSecondsFadeIn.value(), sliderSecondsFadeIn.x - auxX, sliderSecondsFadeIn.y);
-  text("Seconds FadeOUT "+sliderSecondsFadeOut.value(), sliderSecondsFadeOut.x - auxX, sliderSecondsFadeOut.y);
+  text("Seconds FadeIN VIDEO "+sliderSecondsFadeIn.value(), sliderSecondsFadeIn.x - auxX, sliderSecondsFadeIn.y);
+  text("Seconds FadeOUT VIDEO"+sliderSecondsFadeOut.value(), sliderSecondsFadeOut.x - auxX, sliderSecondsFadeOut.y);
   text("Seconds without Interaction "+sliderTimeWithoutInteraction.value(), sliderTimeWithoutInteraction.x - auxX, sliderTimeWithoutInteraction.y);
   
 
@@ -324,6 +334,7 @@ function drawSlidersValues(){
 
 function switchDebugModeUI(_bdebug){
   if(_bdebug){
+    sliderMaxSpeedArduino.show();
     sliderVelVideo.show();
     sliderMaxVolVideo.show();
     sliderMaxVolMainAudio.show();
@@ -332,6 +343,7 @@ function switchDebugModeUI(_bdebug){
     sliderTimeWithoutInteraction.show();
   } 
   else{
+    sliderMaxSpeedArduino.hide();
     sliderVelVideo.hide();
     sliderMaxVolVideo.hide();
     sliderMaxVolMainAudio.hide();
