@@ -19,7 +19,7 @@ let counterVideos = 0;
 let mySpeedArduino, last_mySpeedArduino;
 let bNewArduinoInteraction = false;
 
-let bDebugMode = true;
+let bDebugMode = false;
 let bArduMode = false;
 let bSlidersActive = false;
 let bMouseButtonPressed = false;
@@ -41,14 +41,44 @@ let playerList = []; //arreglo de objetos Jitter
 let sliderMaxSpeedArduino;
 let sliderVelVideo;
 let sliderMaxVolVideo;
+let sliderMinVolVideo;
 let sliderMaxVolMainAudio;
+let sliderMinVolMainAudio;
 let sliderSecondsFadeIn;
 let sliderSecondsFadeOut;
 let sliderTimeWithoutInteraction;
 
+//UI
+let sliderSizeTextInfo;
+let sliderGapTextInfo;
+let sliderPosXTextInfo;
+let sliderPosYTextInfo;
+
+//Default manual configurabe SLIDERS
+  let default_lerpSound = 0.005;
+  let default_auxlerpSpeed = 0.05;
+  let default_SpeedCintaCorrer = 1;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
+  let default_VelVideo = 6;
+  let default_MaxVolVideo = 0.8;
+  let default_MinVolVideo = 0.2;
+
+  let default_MaxVolMainAudio = 0.8;
+  let default_MinVolMainAudio = 0.2;
+
+
+  let default_auxtimeFadeIn = 5;
+  let default_auxtimeFadeOut = 7;
+  let default_timeWithoutInteraction = 30;
+
+  let default_sizeTextInfo = 20;
+  let default_gapTextInfo = 5;
+  let default_posXTextInfo = 100;
+  let default_posYTextInfo = 100;
+
 let buttonStartW = 220;
 let buttonStartH = 70;
 
+//--------------------------------------------------------------------
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -83,7 +113,7 @@ function setup() {
   setupArdu();
 }
   
-//------------------------------------------------
+//----------------------------------------
 //Read mySpeedArduino HERE and update timers
 function updateArduinoData(){
 
@@ -113,6 +143,7 @@ function updateArduinoData(){
 
 }
 
+//----------------------------------------
 function drawPreloadingAnimation(){
     push();
       translate(width/2, height/2);
@@ -124,6 +155,7 @@ function drawPreloadingAnimation(){
     pop();
 }
 
+//----------------------------------------
 function checkPreloading(){
   let numPreloadingManualItems = 9;
 
@@ -140,6 +172,7 @@ function checkPreloading(){
   }
 }
 
+//--------------------------------------------------------------------
 function draw() {
   background(0);
   fill(255);
@@ -156,7 +189,7 @@ function draw() {
       bLestRestartVideos = false;
     }
 
-    //------------------------------------------------
+    ////////////////////
     //DRAW ACTUAL VIDEOS
     for (let i = 0; i < playerList.length; i++) {
       if (actualVideo == playerList[i].idVideo) {
@@ -179,7 +212,7 @@ function draw() {
 
 }
 
-//---------------------------------
+//----------------------------------------
 function restartVideos(){
   actualVideo = 0;
   timeStartInteraction = int(millis()/1000);
@@ -187,6 +220,7 @@ function restartVideos(){
   distanceStartRunned = distArdu;
 }
 
+//----------------------------------------
 function lestPlayOrStop(){
   //HACKy
   //TODO Better try to stop just the one that has to be stop and then control fadeinout?git 
@@ -195,7 +229,7 @@ function lestPlayOrStop(){
   }
 }
 
-//----------------------------------
+//----------------------------------------
 function setNextVideo(){
 
   actualVideo++;
@@ -206,6 +240,7 @@ function setNextVideo(){
   lestPlayOrStop();
 }
 
+//----------------------------------------
 function mousePressed(){
   if(!bLoading){
     if(mouseButton === LEFT) {
@@ -240,24 +275,13 @@ function keyPressed(){
 
 function setupSliders(){
 
-  let sizeSlider = 200;
+  let sizeSlider = 300;
   let initX = 100;
-  let initY = 30;
+  let initY = height*.5;
   let deltaY = 30;
   let countSliders = 1;
 
-  let default_lerpSound = 0.005;
-  let default_auxlerpSpeed = 0.05;
 
-
-  let default_SpeedCintaCorrer = 1;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
-  let default_VelVideo = 6;
-  let default_MaxVolVideo = 0.7;
-  let default_auxtimeFadeIn = 5;
-  let default_auxtimeFadeOut = 7;
-  let default_timeWithoutInteraction = 10;
-
-  
   sliderMaxSpeedArduino = createSlider(1, 5, default_SpeedCintaCorrer);
   sliderMaxSpeedArduino.position(initX, initY+deltaY*countSliders);countSliders++;
   sliderMaxSpeedArduino.style('width', sizeSlider+'px');
@@ -272,9 +296,17 @@ function setupSliders(){
   sliderMaxVolVideo.position(initX, initY+deltaY*countSliders);countSliders++;
   sliderMaxVolVideo.style('width', sizeSlider+'px');
 
-  sliderMaxVolMainAudio = createSlider(0, 1, default_MaxVolVideo, 0.1);
+  sliderMinVolVideo = createSlider(0, 1, default_MinVolVideo, 0.1);
+  sliderMinVolVideo.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderMinVolVideo.style('width', sizeSlider+'px');
+
+  sliderMaxVolMainAudio = createSlider(0, 1, default_MaxVolMainAudio, 0.1);
   sliderMaxVolMainAudio.position(initX, initY+deltaY*countSliders);countSliders++;
   sliderMaxVolMainAudio.style('width', sizeSlider+'px');
+
+  sliderMinVolMainAudio = createSlider(0, 1, default_MinVolMainAudio, 0.1);
+  sliderMinVolMainAudio.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderMinVolMainAudio.style('width', sizeSlider+'px');
 
   sliderSecondsFadeIn = createSlider(0, 10, default_auxtimeFadeIn);
   sliderSecondsFadeIn.position(initX, initY+deltaY*countSliders);countSliders++;
@@ -287,9 +319,28 @@ function setupSliders(){
   sliderTimeWithoutInteraction = createSlider(5, 120, default_timeWithoutInteraction);//10 by default
   sliderTimeWithoutInteraction.position(initX, initY+deltaY*countSliders);countSliders++;
   sliderTimeWithoutInteraction.style('width', sizeSlider+'px');
+
+  //UI
+  sliderSizeTextInfo = createSlider(0, 100, default_sizeTextInfo);
+  sliderSizeTextInfo.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderSizeTextInfo.style('width', sizeSlider+'px');
+
+  sliderGapTextInfo = createSlider(0, 50, default_gapTextInfo);//10 by default
+  sliderGapTextInfo.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderGapTextInfo.style('width', sizeSlider+'px');
+
+  sliderPosXTextInfo = createSlider(10, width, default_posXTextInfo);
+  sliderPosXTextInfo.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderPosXTextInfo.style('width', sizeSlider+'px');
+
+  sliderPosYTextInfo = createSlider(10, height, default_posYTextInfo);//10 by default
+  sliderPosYTextInfo.position(initX, initY+deltaY*countSliders);countSliders++;
+  sliderPosYTextInfo.style('width', sizeSlider+'px');
+  
   
 }
 
+//----------------------------------------
 function isTouchSliders(){ //TODO NOT USED
   let auxPressedSlider = false;
 
@@ -304,6 +355,7 @@ function isTouchSliders(){ //TODO NOT USED
   bSlidersActive = auxPressedSlider;
 }
 
+//----------------------------------------
 function drawSlidersValues(){
 
   let auxX = 0;
@@ -318,11 +370,18 @@ function drawSlidersValues(){
   text("Max Speed ARDUINO "+sliderMaxSpeedArduino.value(), sliderMaxSpeedArduino.x - auxX, sliderMaxSpeedArduino.y);
   text("Max Speed VIDEO "+sliderVelVideo.value(), sliderVelVideo.x - auxX, sliderVelVideo.y);
   text("Max VolFWD VIDEO "+sliderMaxVolVideo.value(), sliderMaxVolVideo.x - auxX, sliderMaxVolVideo.y);
+  text("Min VolFWD VIDEO "+sliderMinVolVideo.value(), sliderMinVolVideo.x - auxX, sliderMinVolVideo.y);
   text("Max VolMainAudio "+sliderMaxVolMainAudio.value(), sliderMaxVolMainAudio.x - auxX, sliderMaxVolMainAudio.y);
+  text("Min VolMainAudio "+sliderMinVolMainAudio.value(), sliderMinVolMainAudio.x - auxX, sliderMinVolMainAudio.y);
   text("Seconds FadeIN VIDEO "+sliderSecondsFadeIn.value(), sliderSecondsFadeIn.x - auxX, sliderSecondsFadeIn.y);
-  text("Seconds FadeOUT VIDEO"+sliderSecondsFadeOut.value(), sliderSecondsFadeOut.x - auxX, sliderSecondsFadeOut.y);
+  text("Seconds FadeOUT VIDEO "+sliderSecondsFadeOut.value(), sliderSecondsFadeOut.x - auxX, sliderSecondsFadeOut.y);
   text("Seconds without Interaction "+sliderTimeWithoutInteraction.value(), sliderTimeWithoutInteraction.x - auxX, sliderTimeWithoutInteraction.y);
   
+  //UI
+  text("sizeTextInfo "+sliderSizeTextInfo.value(), sliderSizeTextInfo.x - auxX, sliderSizeTextInfo.y);
+  text("gapTextInfo "+sliderGapTextInfo.value(), sliderGapTextInfo.x - auxX, sliderGapTextInfo.y);
+  text("sliderPosXTextInfo "+sliderPosXTextInfo.value(), sliderPosXTextInfo.x - auxX, sliderPosXTextInfo.y);
+  text("sliderPosYTextInfo "+sliderPosYTextInfo.value(), sliderPosYTextInfo.x - auxX, sliderPosYTextInfo.y);
 
   pop();
 
@@ -330,29 +389,45 @@ function drawSlidersValues(){
 
 }
 
-//BUTTON///////////////////////////////////////////////////
-
+//----------------------------------------
+//BUTTON//////////////////////////////////
 function switchDebugModeUI(_bdebug){
   if(_bdebug){
     sliderMaxSpeedArduino.show();
     sliderVelVideo.show();
     sliderMaxVolVideo.show();
+    sliderMinVolVideo.show();
     sliderMaxVolMainAudio.show();
+    sliderMinVolMainAudio.show();
     sliderSecondsFadeIn.show();
     sliderSecondsFadeOut.show();
     sliderTimeWithoutInteraction.show();
+
+    sliderSizeTextInfo.show();
+    sliderGapTextInfo.show();
+    sliderPosXTextInfo.show();
+    sliderPosYTextInfo.show();
+
   } 
   else{
     sliderMaxSpeedArduino.hide();
     sliderVelVideo.hide();
     sliderMaxVolVideo.hide();
+    sliderMinVolVideo.hide();
     sliderMaxVolMainAudio.hide();
+    sliderMinVolMainAudio.hide();
     sliderSecondsFadeIn.hide();
     sliderSecondsFadeOut.hide();
     sliderTimeWithoutInteraction.hide();
+
+    sliderSizeTextInfo.hide();
+    sliderGapTextInfo.hide();
+    sliderPosXTextInfo.hide();
+    sliderPosYTextInfo.hide();
   }
 }
 
+//----------------------------------------
 function setButtonStyle(_button){
     _button.style("font-family", "Helvetica");
     _button.style("font-size", 40+"px");
@@ -366,6 +441,7 @@ function setButtonStyle(_button){
     _button.style('color', "white");
 }
 
+//----------------------------------------
 function setupUI_StartButton(){
 
   if (typeof buttonStart !== 'undefined') {
