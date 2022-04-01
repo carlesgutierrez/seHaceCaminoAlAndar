@@ -12,7 +12,7 @@ class PlayerModule {
 
     //From Slider values
     //Hack
-    this.lerpSound = 0.005;
+    this.lerpSound = 0.05;
     this.lerpSpeed = 0.05;
     //this.timeFadeIn = sliderSecondsFadeIn.value();//5;
     //this.timeFadeOut = sliderSecondsFadeOut.value();//7;
@@ -77,7 +77,7 @@ class PlayerModule {
   }
 
   ending(){ // TODO is this used?
-    decreaseVolumeVideo();
+    setZeroVolumeVideo();
   }
 
   drawFadeIn(){
@@ -141,14 +141,37 @@ class PlayerModule {
 
   }
 
-  increaseVolumeVideo(){
+  setMaxVolumeVideo(){
     this.volumeVideo = lerp(this.volumeVideo, sliderMaxVolVideo.value(), this.lerpSound);//not enough time to go until 0.7/sliderMaxVolVideo.value() but is good enough way
     this.movFwd.volume(this.volumeVideo);
   }
 
-  decreaseVolumeVideo(){
+  setMinVolumeVideo(){
     this.volumeVideo = lerp(this.volumeVideo, 0, this.lerpSound); // interpolate to 0
     this.movFwd.volume(this.volumeVideo);
+  }
+
+  setZeroVolumeVideo(){
+    this.volumeVideo = lerp(this.volumeVideo, 0, this.lerpSound); // interpolate to 0
+    this.movFwd.volume(this.volumeVideo);
+  }
+
+  setMinVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
+      if(playerList.length >2){
+        if(playerList[1].bExtraSound){
+          playerList[1].volumeAudioExtraSound = lerp(playerList[1].volumeAudioExtraSound, 0.1, this.lerpSound); // interpolate to 0
+          playerList[1].mainSound.volume(playerList[1].volumeAudioExtraSound);
+        }       
+      }
+  }
+
+  setMaxVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
+      if(playerList.length >2){
+        if(playerList[1].bExtraSound){
+          playerList[1].volumeAudioExtraSound = lerp(playerList[1].volumeAudioExtraSound, sliderMaxVolMainAudio.value(), this.lerpSound); // interpolate to 0
+          playerList[1].mainSound.volume(playerList[1].volumeAudioExtraSound);
+        }       
+      }
   }
 
   unPlayVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
@@ -181,11 +204,11 @@ class PlayerModule {
     if(auxTimeLeft < sliderSecondsFadeOut.value()){
       
       if(actualVideo == playerList.length-1){//HAck fade out last one
-        this.decreaseVolumeVideo();//TODO may be we are doing this double?
+        this.setZeroVolumeVideo();//TODO may be we are doing this double?
         this.unPlayVolumeMainAudio();
         if(bDebugMode)console.log("last vídeo Fade OFF audios");
       }else { // normal fadeout
-        this.decreaseVolumeVideo();
+        this.setZeroVolumeVideo();
         if(bDebugMode)console.log("Fade OFF audio video");
       }
       //FADE OUT Here with TINT?
@@ -204,12 +227,9 @@ class PlayerModule {
     let auxFadeInStart = map(auxTimeStart, sliderSecondsFadeIn.value(), 0, 0, 1, true);//TESTING MARGINS
 
     if (this.movFwd.time() < sliderSecondsFadeIn.value()) {
-      this.increaseVolumeVideo();
+      this.setMinVolumeVideo();
       
-      if(this.bExtraSound){
-        this.volumeAudioExtraSound = lerp(this.volumeAudioExtraSound, sliderMaxVolMainAudio.value(), this.lerpSound);//0,7 / sliderMaxVolMainAudio
-        this.mainSound.volume(this.volumeAudioExtraSound);        
-      }
+      this.setMaxVolumeMainAudio();
 
       this.drawFadeIn();//First Debug with rect red
     }
@@ -227,9 +247,11 @@ class PlayerModule {
     //////////////////////////////
     //Calc and update Volume if Speed is Slower or Higher.
     if(this.speed < 0.9 || this.speed > 1.4){
-      this.increaseVolumeVideo();
+      this.setMaxVolumeVideo();
+      this.setMinVolumeMainAudio();
     }else {
-      this.decreaseVolumeVideo();
+      this.setMinVolumeVideo();
+      this.setMaxVolumeMainAudio();
     }
 
 
