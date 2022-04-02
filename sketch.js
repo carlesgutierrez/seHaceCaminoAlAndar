@@ -59,21 +59,21 @@ let sliderPosYTextInfo;
   let default_auxlerpSpeed = 0.05;
   let default_SpeedCintaCorrer = 1;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
   let default_VelVideo = 6;
-  let default_MaxVolVideo = 0.8;
-  let default_MinVolVideo = 0.2;
+  let default_MaxVolVideo = 0.7;
+  let default_MinVolVideo = 0.1;
 
-  let default_MaxVolMainAudio = 0.8;
-  let default_MinVolMainAudio = 0.2;
+  let default_MaxVolMainAudio = 0.9;
+  let default_MinVolMainAudio = 0.1;
 
 
   let default_auxtimeFadeIn = 5;
   let default_auxtimeFadeOut = 7;
   let default_timeWithoutInteraction = 30;
 
-  let default_sizeTextInfo = 20;
+  let default_sizeTextInfo = 30;
   let default_gapTextInfo = 5;
-  let default_posXTextInfo = 100;
-  let default_posYTextInfo = 100;
+  let default_posXTextInfo = 185;
+  let default_posYTextInfo = 172;
 
 let buttonStartW = 220;
 let buttonStartH = 70;
