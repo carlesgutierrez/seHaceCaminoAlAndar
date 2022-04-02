@@ -103,12 +103,12 @@ class PlayerModule {
   updateSpeedFwd(){
     //SPEED
     let minSpeed = 0.1;
-    let marginMinSpeed = 0.1;
+    let marginMinSpeed = 0.2;
     if(bArduMode)this.newSpeed = map(mySpeedArduino, 0, sliderMaxSpeedArduino.value(), minSpeed, sliderVelVideo.value());
     else this.newSpeed = map(mySpeedArduino, 0, width, minSpeed, sliderVelVideo.value()); //5 SPEED MANUAL ADDDED x5
     this.speed = lerp(this.speed, this.newSpeed, this.lerpSpeed);
 
-    if (this.speed < minSpeed+marginMinSpeed) {
+    if (this.speed < minSpeed+marginMinSpeed && this.newSpeed < 0.4 ) {
       this.speed = minSpeed;
       this.movFwd.pause();
       this.isPause = true;
@@ -264,6 +264,7 @@ class PlayerModule {
       textSize(auxSizeText);
       textAlign(RIGHT);
 
+      text("bArduMode......" + bArduMode, width * auxPosX, height * 0.5+ auxSizeText*-6);
       text("Time since Start......" + ellapsedTimePlaying, width * auxPosX, height * 0.5+ auxSizeText*-5);
       text("Action........." + bNewArduinoInteraction, width * auxPosX, height * 0.5+ auxSizeText*-4);
       text("Time no interaction....." + timeWithoutInteraction, width * auxPosX, height * 0.5+ auxSizeText*-3);
