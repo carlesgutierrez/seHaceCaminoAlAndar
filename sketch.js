@@ -256,6 +256,12 @@ function keyPressed(){
       console.log("bDebugMode = "+bDebugMode)
     }
 
+    if(key == "A" || key == "a"){
+      bArduMode  = !bArduMode ;
+      console.log("bArduMode  = "+bArduMode)
+    }
+
+
     if(key == "r" || key == "R"){
       restartVideos();
     }
