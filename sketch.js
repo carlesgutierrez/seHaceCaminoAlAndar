@@ -80,7 +80,7 @@ let buttonStartH = 70;
 
 //--------------------------------------------------------------------
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight);//1920, 1080 or // windowWidth, windowHeight
 
   //TODO LOAD JSON with slider values and add to setupSliders(_myLoadedJson)...
   setupSliders();
