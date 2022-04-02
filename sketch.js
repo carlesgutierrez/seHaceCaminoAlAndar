@@ -91,14 +91,7 @@ function setup() {
   if(false){
     setupUI_StartButton();
   }else{
-    playerList.push(new PlayerModule(counterVideos, "assets/00.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/01.mp4", "assets/mainSound.mp3"));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/02.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/03.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/04.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/05.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/06.mp4", ""));counterVideos++;
-    playerList.push(new PlayerModule(counterVideos, "assets/07.mp4", ""));counterVideos++;
+    loadMyVideoList();
   }
 
 
@@ -159,7 +152,7 @@ function drawPreloadingAnimation(){
 function checkPreloading(){
   let numPreloadingManualItems = 9;
 
-  if(preloadingItems == numPreloadingManualItems){//manual count..
+  if(preloadingItems >= numPreloadingManualItems){//manual count..
     //Finish Loading
     bLoading = false;
     if(bDebugMode)console.log("bLoading DONE -> preloadingItems was = "+ preloadingItems);
@@ -262,6 +255,11 @@ function keyPressed(){
       bDebugMode = !bDebugMode;
       switchDebugModeUI(bDebugMode);
       console.log("bDebugMode = "+bDebugMode)
+    }
+
+    if(key == "A" || key == "a"){
+      bArduMode  = !bArduMode ;
+      console.log("bArduMode  = "+bArduMode)
     }
 
     if(key == "r" || key == "R"){
