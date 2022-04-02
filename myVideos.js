@@ -1,4 +1,5 @@
 let numPreloadingManualItems = 8;
+let myPortCOM = 'COM5';//'COM5'
 
 function loadMyVideoList(){
     playerList.push(new PlayerModule(counterVideos, "assets/00.mp4", ""));counterVideos++;
