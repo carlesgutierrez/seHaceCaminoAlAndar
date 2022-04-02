@@ -240,7 +240,7 @@ class PlayerModule {
     let finalAlpha = min(numArray);
     //tint(255, 100); // animation violation , very slow
     drawingContext.globalAlpha = auxFadeOutLeft; // alternative
-    image(this.movFwd, 0, 0);
+    image(this.movFwd, 0, 0, width, height);
     drawingContext.globalAlpha = 1;//restore
 
 

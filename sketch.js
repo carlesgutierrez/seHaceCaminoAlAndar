@@ -80,7 +80,7 @@ let buttonStartH = 70;
 
 //--------------------------------------------------------------------
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight);//1920, 1080 or // windowWidth, windowHeight
 
   //TODO LOAD JSON with slider values and add to setupSliders(_myLoadedJson)...
   setupSliders();
@@ -150,7 +150,6 @@ function drawPreloadingAnimation(){
 
 //----------------------------------------
 function checkPreloading(){
-  let numPreloadingManualItems = 9;
 
   if(preloadingItems >= numPreloadingManualItems){//manual count..
     //Finish Loading
@@ -262,6 +261,7 @@ function keyPressed(){
       console.log("bArduMode  = "+bArduMode)
     }
 
+
     if(key == "r" || key == "R"){
       restartVideos();
     }
@@ -275,7 +275,7 @@ function setupSliders(){
 
   let sizeSlider = 300;
   let initX = 100;
-  let initY = height*.5;
+  let initY = height*.3;
   let deltaY = 30;
   let countSliders = 1;
 
@@ -371,7 +371,7 @@ function drawSlidersValues(){
   text("Min VolFWD VIDEO "+sliderMinVolVideo.value(), sliderMinVolVideo.x - auxX, sliderMinVolVideo.y);
   text("Max VolMainAudio "+sliderMaxVolMainAudio.value(), sliderMaxVolMainAudio.x - auxX, sliderMaxVolMainAudio.y);
   text("Min VolMainAudio "+sliderMinVolMainAudio.value(), sliderMinVolMainAudio.x - auxX, sliderMinVolMainAudio.y);
-  text("Seconds FadeIN VIDEO "+sliderSecondsFadeIn.value(), sliderSecondsFadeIn.x - auxX, sliderSecondsFadeIn.y);
+  text("Seconds FadeIN VIDEO "+sliderSecondsFadeIn.value()  , sliderSecondsFadeIn.x - auxX, sliderSecondsFadeIn.y);
   text("Seconds FadeOUT VIDEO "+sliderSecondsFadeOut.value(), sliderSecondsFadeOut.x - auxX, sliderSecondsFadeOut.y);
   text("Seconds without Interaction "+sliderTimeWithoutInteraction.value(), sliderTimeWithoutInteraction.x - auxX, sliderTimeWithoutInteraction.y);
   
