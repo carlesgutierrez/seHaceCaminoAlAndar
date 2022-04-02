@@ -12,7 +12,7 @@ class PlayerModule {
 
     //From Slider values
     //Hack
-    this.lerpSound = 0.005;
+    this.lerpSound = 0.05;
     this.lerpSpeed = 0.05;
     //this.timeFadeIn = sliderSecondsFadeIn.value();//5;
     //this.timeFadeOut = sliderSecondsFadeOut.value();//7;
@@ -77,7 +77,7 @@ class PlayerModule {
   }
 
   ending(){ // TODO is this used?
-    decreaseVolumeVideo();
+    setZeroVolumeVideo();
   }
 
   drawFadeIn(){
@@ -141,14 +141,37 @@ class PlayerModule {
 
   }
 
-  increaseVolumeVideo(){
-    this.volumeVideo = lerp(this.volumeVideo, sliderMaxVolVideo.value(), this.lerpSound);//not enough time to go until 0.7/sliderMaxVolVideo.value() but is good enough way
+  setMaxVolumeVideo(){
+    this.volumeVideo = lerp(this.volumeVideo, sliderMaxVolVideo.value(), this.lerpSound);
     this.movFwd.volume(this.volumeVideo);
   }
 
-  decreaseVolumeVideo(){
+  setMinVolumeVideo(){
+    this.volumeVideo = lerp(this.volumeVideo, sliderMinVolVideo.value(), this.lerpSound); // interpolate to 0
+    this.movFwd.volume(this.volumeVideo);
+  }
+
+  setZeroVolumeVideo(){
     this.volumeVideo = lerp(this.volumeVideo, 0, this.lerpSound); // interpolate to 0
     this.movFwd.volume(this.volumeVideo);
+  }
+
+  setMinVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
+      if(playerList.length >2){
+        if(playerList[1].bExtraSound){
+          playerList[1].volumeAudioExtraSound = lerp(playerList[1].volumeAudioExtraSound, sliderMinVolMainAudio.value(), this.lerpSound); // interpolate to 0
+          playerList[1].mainSound.volume(playerList[1].volumeAudioExtraSound);
+        }       
+      }
+  }
+
+  setMaxVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
+      if(playerList.length >2){
+        if(playerList[1].bExtraSound){
+          playerList[1].volumeAudioExtraSound = lerp(playerList[1].volumeAudioExtraSound, sliderMaxVolMainAudio.value(), this.lerpSound); // interpolate to 0
+          playerList[1].mainSound.volume(playerList[1].volumeAudioExtraSound);
+        }       
+      }
   }
 
   unPlayVolumeMainAudio(){ //Hack to get allways access to this video.. this only works if we play just one video at time, not amny... Then remove from here and set out this class.
@@ -181,15 +204,15 @@ class PlayerModule {
     if(auxTimeLeft < sliderSecondsFadeOut.value()){
       
       if(actualVideo == playerList.length-1){//HAck fade out last one
-        this.decreaseVolumeVideo();//TODO may be we are doing this double?
+        this.setZeroVolumeVideo();//TODO may be we are doing this double?
         this.unPlayVolumeMainAudio();
         if(bDebugMode)console.log("last vídeo Fade OFF audios");
       }else { // normal fadeout
-        this.decreaseVolumeVideo();
+        this.setZeroVolumeVideo();
         if(bDebugMode)console.log("Fade OFF audio video");
       }
       //FADE OUT Here with TINT?
-      this.drawFadeOut(auxFadeOutLeft);//First Debug with rect red
+      //this.drawFadeOut(auxFadeOutLeft);//First Debug with rect red
   
       //End FADE out... NEXT?
       if(auxTimeLeft <= 0.1 && actualVideo == this.idVideo){ // General comparison 
@@ -204,14 +227,11 @@ class PlayerModule {
     let auxFadeInStart = map(auxTimeStart, sliderSecondsFadeIn.value(), 0, 0, 1, true);//TESTING MARGINS
 
     if (this.movFwd.time() < sliderSecondsFadeIn.value()) {
-      this.increaseVolumeVideo();
+      this.setMinVolumeVideo();
       
-      if(this.bExtraSound){
-        this.volumeAudioExtraSound = lerp(this.volumeAudioExtraSound, sliderMaxVolMainAudio.value(), this.lerpSound);//0,7 / sliderMaxVolMainAudio
-        this.mainSound.volume(this.volumeAudioExtraSound);        
-      }
+      this.setMaxVolumeMainAudio();
 
-      this.drawFadeIn();//First Debug with rect red
+      //this.drawFadeIn();//First Debug with rect red
     }
 
     /////////////////////////////
@@ -225,11 +245,13 @@ class PlayerModule {
 
 
     //////////////////////////////
-    //Calc and update Volume if Speed is Slower or Higher.
+    //RE-UPDATE Volume if Speed is Slower or Higher.
     if(this.speed < 0.9 || this.speed > 1.4){
-      this.increaseVolumeVideo();
+      this.setMaxVolumeVideo();
+      this.setMinVolumeMainAudio();
     }else {
-      this.decreaseVolumeVideo();
+      this.setMinVolumeVideo();
+      this.setMaxVolumeMainAudio();
     }
 
 
@@ -272,19 +294,26 @@ class PlayerModule {
     if(true){
       /////////////////////////////
       //REGULAR MODE INFO
-      let sizeTextInfo = 20;
+      let sizeTextInfo = sliderSizeTextInfo.value();
+      let gapTextInfo = sliderGapTextInfo.value();
+      let auxIdTi = 0;
+      let auxPosXText = sliderPosXTextInfo.value();
+      let auxPosYText = sliderPosYTextInfo.value();
+
+      fill(255);
+      noStroke();
       textSize(sizeTextInfo);
       textAlign(LEFT);
-      text("x" + nfc(this.speed, 2), width * 0.1, height * 0.1);
-      text(distanceRunned+" meters", width * 0.1, height * 0.1+sizeTextInfo*1);
+      text("x" + nfc(this.speed, 2), auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+      text(distanceRunned+" meters", auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
 
 
-      let auxSec=floor(this.movFwd.duration());
+      let auxSec=floor(auxTimeLeft);//this.movFwd.duration()
       let auxhours   = Math.floor(auxSec / 3600); // get hours
       let auxMinutes = Math.floor((auxSec - (auxhours * 3600)) / 60); // get minutes
       let auxSeconds = auxSec - (auxhours * 3600) - (auxMinutes * 60); //  get seconds
       //text(auxSec+" seconds", width * 0.1, height * 0.1+sizeTextInfo*2);
-      text(auxMinutes+"'"+auxSeconds+'"', width * 0.1, height * 0.1+sizeTextInfo*2);
+      text(auxMinutes+"'"+auxSeconds+'"', auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;;
       
     }
   }

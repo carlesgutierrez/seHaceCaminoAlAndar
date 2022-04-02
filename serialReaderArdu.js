@@ -18,7 +18,7 @@ function setupArdu() {
  serial.list();
   
 //serial.open(portName, optionsArdu);
- serial.open('COM5', optionsArdu);
+ serial.open(myPortCOM, optionsArdu);
 
  serial.on('connected', serverConnected);
 
