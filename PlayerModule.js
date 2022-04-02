@@ -301,21 +301,42 @@ class PlayerModule {
       let auxPosXText = sliderPosXTextInfo.value();
       let auxPosYText = sliderPosYTextInfo.value();
 
-      fill(255);
-      noStroke();
-      textSize(sizeTextInfo);
-      textAlign(LEFT);
-      text("x" + nfc(this.speed, 2), auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
-      text(distanceRunned+" meters", auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+      let auxVelID0 = "x1.00"
+      let auxMetrosID0 = "≈ 600";
 
-
-      let auxSec=floor(auxTimeLeft);//this.movFwd.duration()
+      //Default video time
+      let auxSec =floor(720);//this.movFwd.duration()
       let auxhours   = Math.floor(auxSec / 3600); // get hours
       let auxMinutes = Math.floor((auxSec - (auxhours * 3600)) / 60); // get minutes
       let auxSeconds = auxSec - (auxhours * 3600) - (auxMinutes * 60); //  get seconds
-      //text(auxSec+" seconds", width * 0.1, height * 0.1+sizeTextInfo*2);
-      text(auxMinutes+"'"+auxSeconds+'"', auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;;
-      
+
+      if(this.idVideo == 0){
+        fill(255);
+        noStroke();
+        textSize(sizeTextInfo);
+        textAlign(LEFT);
+        text(auxVelID0, auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+        text(auxMetrosID0+" m", auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+        text(auxMinutes+"'"+auxSeconds+'"', auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;;
+  
+      }
+      else{
+        fill(255);
+        noStroke();
+        textSize(sizeTextInfo);
+        textAlign(LEFT);
+        text("x" + nfc(this.speed, 2), auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+        text(int(distanceRunned)+" m", auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;
+
+
+        auxSec=floor(auxTimeLeft);
+        auxhours   = Math.floor(auxSec / 3600); // get hours
+        auxMinutes = Math.floor((auxSec - (auxhours * 3600)) / 60); // get minutes
+        auxSeconds = auxSec - (auxhours * 3600) - (auxMinutes * 60); //  get seconds
+        text(auxMinutes+"'"+auxSeconds+'"', auxPosXText, auxPosYText+sizeTextInfo*auxIdTi+gapTextInfo*auxIdTi);auxIdTi++;;
+      }
+
+  
     }
   }
 
