@@ -275,7 +275,7 @@ function setupSliders(){
 
   let sizeSlider = 300;
   let initX = 100;
-  let initY = height*.5;
+  let initY = height*.3;
   let deltaY = 30;
   let countSliders = 1;
 

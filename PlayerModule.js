@@ -267,7 +267,9 @@ class PlayerModule {
       stroke(0)
       strokeWeight(1)
       rect(0,0, width*this.pctVideo, 10);
-    }else{
+    }
+
+    if(true){
       /////////////////////////////
       //REGULAR MODE INFO
       let sizeTextInfo = 20;
