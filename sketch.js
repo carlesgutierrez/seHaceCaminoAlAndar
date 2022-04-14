@@ -57,7 +57,7 @@ let sliderPosYTextInfo;
 //Default manual configurabe SLIDERS
   let default_lerpSound = 0.005;
   let default_auxlerpSpeed = 0.05;
-  let default_SpeedCintaCorrer = 3;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
+  let default_SpeedCintaCorrer = 2;// ADAPT HERE IF NEW HARDWARE ( Cinta de correr ) IS USED
   let default_VelVideo = 4;
   let default_MaxVolVideo = 0.3;
   let default_MinVolVideo = 0.1;
@@ -405,6 +405,8 @@ function switchDebugModeUI(_bdebug){
     sliderPosXTextInfo.show();
     sliderPosYTextInfo.show();
 
+    cursor();
+
   } 
   else{
     sliderMaxSpeedArduino.hide();
@@ -421,6 +423,8 @@ function switchDebugModeUI(_bdebug){
     sliderGapTextInfo.hide();
     sliderPosXTextInfo.hide();
     sliderPosYTextInfo.hide();
+
+    noCursor();
   }
 }
 
